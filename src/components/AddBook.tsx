@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addBook } from '../store/booksSlice';
+import { Button } from '@mui/material';
 
 const AddBook = ({ onClose }: { onClose: () => void }) => {
   const dispatch = useDispatch();
@@ -56,8 +57,7 @@ const AddBook = ({ onClose }: { onClose: () => void }) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <button onClick={handleSubmit}>Submit</button>
-      <button onClick={onClose}>Cancel</button>
+      <Button onClick={handleSubmit}>Submit</Button>
     </div>
   );
 };
