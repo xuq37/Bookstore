@@ -35,7 +35,12 @@ const AddBook = ({ onClose }: { onClose: () => void }) => {
         type="number" // Ensures only numerical entries
         placeholder="Price"
         value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        onChange={(e) => {
+          const inputPrice = e.target.value;
+          if (/^\d*\.?\d*$/.test(inputPrice)) {
+            setPrice(inputPrice);
+          }
+        }}
         min="0.01"  // Ensures positive values only
         step="0.01"  // Allows decimal places
       />
