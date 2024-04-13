@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import { deleteBook } from '../store/booksSlice';
 import dynamic from 'next/dynamic';
+import { Button } from '@mui/material';
 
 const Modal = dynamic(() => import('../components/Modal'), { ssr: false });
 const AddBook = dynamic(() => import('../components/AddBook'), { ssr: false });
@@ -34,62 +35,65 @@ const Home = () => {
     };
   
     return (
-      <div style={{ padding: '20px' }}>
-        <button 
-          style={{
-            padding: '10px 20px',
-            fontSize: '20px',
-            cursor: 'pointer',
-            margin: '20px auto',
-            display: 'block'
-          }}
-          onClick={() => setIsAdding(true)}
-        >
-          Add Book
-        </button>
-        <Modal show={isAdding} onClose={() => setIsAdding(false)}>
-          <AddBook onClose={() => setIsAdding(false)} />
-        </Modal>
-        {books.map(book => (
-          <div 
-            key={book.id} 
-            onClick={() => handleOpenEditBook(book)}
+        <div style={{ padding: '20px' }}>
+          <Button 
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              padding: '10px',
-              marginBottom: '10px',
-              border: '1px solid #ccc',
-              borderRadius: '5px',
-              cursor: 'pointer'
+              padding: '10px 20px',
+              fontSize: '20px',
+              cursor: 'pointer',
+              margin: '20px auto',
+              display: 'block'
             }}
+            onClick={() => setIsAdding(true)}
           >
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-              <p style={{ margin: '0 10px', flex: 1 }}>{book.name}</p>
-              <p style={{ margin: '0 10px', flex: 1 }}>{book.price}</p>
-              <p style={{ margin: '0 10px', flex: 1 }}>{book.category}</p>
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch(deleteBook(book.id));
-                }}
-                style={{ padding: '5px 10px', cursor: 'pointer' }}
-              >
-                Delete
-              </button>
-            </div>
-            {book.description && <p style={{ margin: '10px' }}>{book.description}</p>}
-          </div>
-        ))}
-        {isEditing && (
-          <Modal show={isEditing} onClose={handleCloseEditBook}>
-            <EditBook book={currentBook} onClose={handleCloseEditBook} />
+            Add Book
+          </Button>
+          <Modal show={isAdding} onClose={() => setIsAdding(false)}>
+            <AddBook onClose={() => setIsAdding(false)} />
           </Modal>
-        )}
-      </div>
-    );
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr) 2fr 80px', gap: '10px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '5px', padding: '10px' }}>
+            <strong>Name</strong>
+            <strong>Price</strong>
+            <strong>Category</strong>
+            <strong>Description</strong>
+          </div>
+          {books.map(book => (
+            <div 
+              key={book.id} 
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr) 2fr 80px',
+                gap: '10px',
+                padding: '10px',
+                marginBottom: '10px',
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                alignItems: 'start'
+              }}
+              onClick={() => handleOpenEditBook(book)}
+            >
+              <p style={{ margin: '0', overflowWrap: 'break-word' }}>{book.name}</p>
+              <p style={{ margin: '0', overflowWrap: 'break-word' }}>{book.price}</p>
+              <p style={{ margin: '0', overflowWrap: 'break-word' }}>{book.category}</p>
+              <p style={{ margin: '0', overflowWrap: 'break-word' }}>{book.description}</p>
+              <Button 
+                  onClick={(e) => {
+                    e.stopPropagation(); // Stop the click from triggering the row click
+                    dispatch(deleteBook(book.id));
+                  }}
+                  style={{ padding: '5px 10px', cursor: 'pointer' }}
+              >
+                  Delete
+              </Button>
+            </div>
+          ))}
+          {isEditing && (
+            <Modal show={isEditing} onClose={handleCloseEditBook}>
+              <EditBook book={currentBook} onClose={handleCloseEditBook} />
+            </Modal>
+          )}
+        </div>
+      );
   };
-  
+    
   export default Home;

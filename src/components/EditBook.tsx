@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateBook } from '../store/booksSlice';
+import { Button } from '@mui/material';
 
 const EditBook = ({ book, onClose }: { book: any, onClose: () => void }) => {
   const dispatch = useDispatch();
@@ -33,7 +34,12 @@ const EditBook = ({ book, onClose }: { book: any, onClose: () => void }) => {
         type="number" // Ensures only numerical entries
         placeholder="Price"
         value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        onChange={(e) => {
+          const inputPrice = e.target.value;
+          if (/^\d*\.?\d*$/.test(inputPrice)) {
+            setPrice(inputPrice);
+          }
+        }}
         min="0.01"  // Ensures positive values only
         step="0.01"  // Allows decimal places
       />
@@ -49,8 +55,7 @@ const EditBook = ({ book, onClose }: { book: any, onClose: () => void }) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <button onClick={handleSubmit}>Update</button>
-      <button onClick={onClose}>Cancel</button>
+      <Button onClick={handleSubmit}>Update</Button>
     </div>
   );
 };
